@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator HPHT - My Melody Style</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #FFB6C1, #FFC0CB, #FFCCCB);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        .container {
+            background: linear-gradient(145deg, #FFFFFF, #FFF0F5);
+            border-radius: 30px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 40px rgba(255, 182, 193, 0.5);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            border: 4px solid #FFB6C1;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .melody-ears {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .melody-ears::before,
+        .melody-ears::after {
+            content: '';
+            width: 25px;
+            height: 35px;
+            background: linear-gradient(145deg, #FFB6C1, #FF91A4);
+            border-radius: 50% 50% 20% 20%;
+            border: 2px solid #FF69B4;
+            position: relative;
+            animation: wiggle 2s ease-in-out infinite alternate;
+        }
+
+        .melody-ears::before {
+            transform: rotate(-15deg);
+        }
+
+        .melody-ears::after {
+            transform: rotate(15deg);
+        }
+
+        @keyframes wiggle {
+            0% {
+                transform: rotate(-15deg) translateY(0px);
+            }
+
+            100% {
+                transform: rotate(-15deg) translateY(-3px);
+            }
+        }
+
+        /* Add cute bow */
+        .melody-bow {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 20px;
+            background: #FF1493;
+            border-radius: 50%;
+            z-index: 10;
+        }
+
+        .melody-bow::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 12px;
+            background: #DC143C;
+            border-radius: 2px;
+        }
+
+        .melody-bow::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -8px;
+            width: 20px;
+            height: 15px;
+            background: #FF1493;
+            border-radius: 50%;
+            box-shadow: 26px 0 0 #FF1493;
+        }
+
+        h1 {
+            color: #FF69B4;
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.3);
+        }
+
+        .subtitle {
+            color: #FF91A4;
+            font-size: 14px;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            color: #FF69B4;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        input[type="date"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 3px solid #FFB6C1;
+            border-radius: 20px;
+            font-size: 16px;
+            background: linear-gradient(145deg, #FFF0F5, #FFFFFF);
+            color: #FF1493;
+            transition: all 0.3s ease;
+        }
+
+        input[type="date"]:focus {
+            outline: none;
+            border-color: #FF69B4;
+            box-shadow: 0 0 15px rgba(255, 105, 180, 0.5);
+            transform: scale(1.02);
+        }
+
+        .calculate-btn {
+            background: linear-gradient(145deg, #FF69B4, #FFB6C1);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            width: 100%;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(255, 105, 180, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(255, 105, 180, 0.6);
+            background: linear-gradient(145deg, #FF1493, #FF69B4);
+        }
+
+        .calculate-btn:active {
+            transform: translateY(0px);
+        }
+
+        .result {
+            background: linear-gradient(145deg, #FFF0F5, #FFE4E1);
+            border: 3px solid #FFB6C1;
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 20px;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result::before {
+            content: '♡';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 20px;
+            color: #FFB6C1;
+            animation: heartbeat 2s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        .result h3 {
+            color: #FF69B4;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .result-item {
+            background: rgba(255, 182, 193, 0.3);
+            border-radius: 15px;
+            padding: 10px;
+            margin: 5px 0;
+            color: #FF1493;
+            font-weight: bold;
+        }
+
+        .trimester-info {
+            background: linear-gradient(145deg, #FFE4E1, #FFF0F5);
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 15px;
+            border: 2px solid #FFB6C1;
+        }
+
+        .trimester-title {
+            color: #FF69B4;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .trimester-item {
+            background: rgba(255, 105, 180, 0.2);
+            border-radius: 10px;
+            padding: 8px;
+            margin: 5px 0;
+            color: #FF1493;
+            font-size: 14px;
+        }
+
+        .footer {
+            margin-top: 20px;
+            color: #FF91A4;
+            font-size: 12px;
+            font-style: italic;
+        }
+
+        /* Floating hearts animation */
+        .heart {
+            position: fixed;
+            color: #FFB6C1;
+            font-size: 20px;
+            animation: floatHeart 4s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                opacity: 1;
+                transform: translateY(100vh) rotate(0deg);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) rotate(360deg);
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 480px) {
+            .container {
+                margin: 20px;
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="melody-ears"></div>
+        <div class="melody-bow"></div>
+
+        <h1>🎀 Kalkulator HPHT 🎀</h1>
+        <p class="subtitle">Untuk Lily! ♡</p>
+
+        <div class="input-group">
+            <label for="hpht">📅 Tanggal HPHT (Hari Pertama Haid Terakhir):</label>
+            <input type="date" id="hpht" name="hpht">
+        </div>
+
+        <button class="calculate-btn" onclick="calculateHPHT()">
+            ✨ Hitung Sekarang ✨
+        </button>
+
+        <div class="result" id="result">
+            <p style="color: #FF91A4; font-style: italic;">Masukkan tanggal HPHT untuk melihat prediksi kelahiran dan
+                informasi kehamilan~ ♡</p>
+        </div>
+
+        <div class="footer">
+            💕 Dibuat sama orang jago dan kokuet 💕<br>
+            <small>*Hasil ini hanya perkiraan, konsultasi dengan dokter untuk informasi akurat</small>
+        </div>
+    </div>
+
+    <script>
+        // Fungsi untuk membuat hati melayang (dari kode Anda sebelumnya)
+        function createFloatingHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '♡';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            heart.style.animationDelay = (Math.random() * 0.5) + 's'; // Tambahkan sedikit delay acak
+            document.body.appendChild(heart);
+
+            // Hapus hati setelah animasinya selesai
+            setTimeout(() => {
+                heart.remove();
+            }, parseFloat(heart.style.animationDuration) * 1000 + parseFloat(heart.style.animationDelay) * 1000);
+        }
+
+        // Buat hati secara berkala
+        setInterval(createFloatingHeart, 1000); // Lebih sering muncul
+
+        /**
+         * Memperbaiki logika utama perhitungan HPHT, HPL, usia kehamilan,
+         * sisa hari, dan trimester.
+         */
+        function calculateHPHT() {
+            const hphtInput = document.getElementById('hpht');
+            const resultDiv = document.getElementById('result');
+
+            // Validasi input: pastikan tanggal HPHT sudah dimasukkan
+            if (!hphtInput.value) {
+                resultDiv.innerHTML = `
+                <p style="color: #FF1493; font-weight: bold;">
+                    🌸 Oops! Jangan lupa masukkan tanggal HPHT ya~ 🌸
+                </p>
+            `;
+                return;
+            }
+
+            const hphtDate = new Date(hphtInput.value);
+            // Penting: Atur jam, menit, detik, milidetik ke 0 (tengah malam)
+            // untuk menghindari masalah perbedaan zona waktu atau jam yang bisa membuat selisih hari tidak akurat.
+            hphtDate.setHours(0, 0, 0, 0);
+
+            const today = new Date();
+            // Penting: Atur jam, menit, detik, milidetik ke 0 (tengah malam) untuk konsistensi perhitungan hari.
+            today.setHours(0, 0, 0, 0);
+
+            // --- LOGIKA PERBAIKAN DI SINI ---
+
+            // Hitung selisih waktu dalam milidetik antara hari ini dan HPHT
+            const diffTime = today.getTime() - hphtDate.getTime();
+
+            // Hitung selisih hari (dalam hari penuh).
+            // Tambahkan +1 untuk memastikan HPHT dihitung sebagai hari pertama (hari ke-1),
+            // bukan hari ke-0, agar sesuai dengan perhitungan manual "jumlah hari kalender".
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+            // --- AKHIR LOGIKA PERBAIKAN ---
+
+            // Hitung perkiraan tanggal lahir (HPL): HPHT + 280 hari (standar 40 minggu)
+            const dueDate = new Date(hphtDate);
+            dueDate.setDate(dueDate.getDate() + 280);
+
+            // Hitung usia kehamilan dalam minggu dan hari
+            const pregnancyWeeks = Math.floor(diffDays / 7);
+            const pregnancyDays = diffDays % 7;
+
+            // Hitung sisa hari hingga HPL
+            // Gunakan Math.ceil agar sisa hari dihitung 'penuh' hingga tanggal HPL.
+            const daysUntilDue = Math.ceil((dueDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+
+            // Format tanggal HPL agar mudah dibaca
+            const dueDateFormatted = dueDate.toLocaleDateString('id-ID', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            let resultHTML = `
+            <h3>🎀 Hasil Perhitungan HPHT 🎀</h3>
+            <div class="result-item">
+                <strong>📅 Perkiraan Tanggal Lahir (HPL):</strong><br>
+                ${dueDateFormatted}
+            </div>
+        `;
+
+            // Tampilkan hasil hanya jika kehamilan sudah dimulai dan masih dalam rentang normal (hingga 42 minggu)
+            if (diffDays >= 1 && pregnancyWeeks <= 42) {
+                resultHTML += `
+                <div class="result-item">
+                    <strong>⏰ Usia Kehamilan Saat Ini:</strong><br>
+                    ${pregnancyWeeks} minggu ${pregnancyDays} hari
+                </div>
+                <div class="result-item">
+                    <strong>⭐ Sisa Hari Hingga HPL:</strong><br>
+                    ${daysUntilDue > 0 ? daysUntilDue + ' hari lagi' : 'Sudah lewat HPL ' + Math.abs(daysUntilDue) + ' hari'}
+                </div>
+            `;
+            } else if (diffDays < 1) { // HPHT di masa depan atau belum ada 1 hari penuh
+                resultHTML += `
+                <div class="result-item" style="background: rgba(255, 182, 193, 0.5);">
+                    <strong>⚠️ Tanggal HPHT di masa depan</strong><br>
+                    Pastikan tanggal yang dimasukkan sudah benar ya~
+                </div>
+            `;
+            } else { // Kehamilan melewati 42 minggu
+                resultHTML += `
+                <div class="result-item" style="background: rgba(255, 182, 193, 0.5);">
+                    <strong>ℹ️ Kehamilan sudah melewati 42 minggu</strong><br>
+                    Segera konsultasi dengan dokter
+                </div>
+            `;
+            }
+
+            resultDiv.innerHTML = resultHTML;
+        }
+
+        // Bagian untuk efek interaktif (dari kode Anda sebelumnya)
+        document.addEventListener('DOMContentLoaded', function () {
+            // Tambahkan efek klik pada container (kilau)
+            document.querySelector('.container').addEventListener('click', function (e) {
+                // Hanya picu jika klik pada container itu sendiri atau elemen telinga/pita Melody
+                if (e.target === this || e.target.classList.contains('melody-ears') || e.target.classList.contains('ear') || e.target.classList.contains('melody-bow')) {
+                    const sparkle = document.createElement('div');
+                    sparkle.innerHTML = '✨';
+                    sparkle.style.position = 'absolute';
+                    sparkle.style.left = e.offsetX + 'px';
+                    sparkle.style.top = e.offsetY + 'px';
+                    sparkle.style.color = '#FFB6C1';
+                    sparkle.style.pointerEvents = 'none';
+                    sparkle.style.animation = 'fadeOut 1s ease-out forwards';
+                    this.appendChild(sparkle);
+
+                    setTimeout(() => sparkle.remove(), 1000);
+                }
+            });
+        });
+
+        // Tambahkan keyframes untuk animasi fadeOut (dari kode Anda sebelumnya)
+        const style = document.createElement('style');
+        style.textContent = `
+        @keyframes fadeOut {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(1.5) translateY(-20px); }
+        }
+        /* Tambahkan CSS untuk heart class dan melody-ears/bow jika belum ada di CSS eksternal Anda */
+        .heart {
+            position: fixed;
+            top: 100vh;
+            font-size: 1.5rem;
+            color: #FF69B4;
+            pointer-events: none;
+            opacity: 0;
+            animation: floatUp ease-in-out forwards;
+            transform: translateX(-50%);
+            z-index: 0;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) translateX(-50%) scale(0.5);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-120vh) translateX(-50%) scale(1.2);
+                opacity: 0;
+            }
+        }
+        /* Asumsi class .container, .result-item, .trimester-info, .trimester-title, .trimester-item sudah ada di CSS Anda */
+    `;
+        document.head.appendChild(style);
+    </script>
+
+</body>
+
+</html>
